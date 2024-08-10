@@ -69,8 +69,8 @@ void UShootingComponent::Shoot()
 
 	FHitResult HitResult;
 
+	DrawDebugLine(GetWorld(), Start, End, FColor::Black, false, 1.0f, 0.0f, 5.0f);
 	GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_Visibility, CollisionParams);
-
 	if (HitResult.bBlockingHit) {
 
 		auto Actor = HitResult.GetActor();
