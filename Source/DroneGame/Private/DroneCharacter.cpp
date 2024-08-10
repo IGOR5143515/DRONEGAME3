@@ -41,7 +41,7 @@ void ADroneCharacter::BeginPlay()
 	Super::BeginPlay();
 	
 	HealthComponent->OnDeath.AddUObject(this, &ADroneCharacter::OnDeath);
-
+	// CHeck Changes;
 }
 
 
