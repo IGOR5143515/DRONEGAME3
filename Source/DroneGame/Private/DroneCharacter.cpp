@@ -41,7 +41,7 @@ void ADroneCharacter::BeginPlay()
 	Super::BeginPlay();
 	
 	HealthComponent->OnDeath.AddUObject(this, &ADroneCharacter::OnDeath);
-	// CHeck Changes;
+	
 }
 
 
@@ -66,6 +66,8 @@ void ADroneCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 	PlayerInputComponent->BindAction("HitButton", IE_Pressed, ShootComponent, &UShootingComponent::StartFire);
 	PlayerInputComponent->BindAction("HitButton", IE_Released, ShootComponent, &UShootingComponent::StopFire);
+
+
 
 }
 
