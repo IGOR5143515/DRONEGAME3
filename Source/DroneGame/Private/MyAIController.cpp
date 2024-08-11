@@ -2,4 +2,11 @@
 
 
 #include "MyAIController.h"
+#include "Components/MyAIPerceptionComponent.h"
 
+AMyAIController::AMyAIController()
+{
+
+	PerceptionComp = CreateDefaultSubobject<UMyAIPerceptionComponent>("PerceptionComp");
+	SetPerceptionComponent(*PerceptionComp);
+}

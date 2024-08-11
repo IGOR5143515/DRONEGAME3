@@ -6,12 +6,17 @@
 #include "AIController.h"
 #include "MyAIController.generated.h"
 
-/**
- * 
- */
+class UMyAIPerceptionComponent;
+
 UCLASS()
 class DRONEGAME_API AMyAIController : public AAIController
 {
 	GENERATED_BODY()
+
+public:
+	AMyAIController();
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	UMyAIPerceptionComponent* PerceptionComp;
 	
 };
