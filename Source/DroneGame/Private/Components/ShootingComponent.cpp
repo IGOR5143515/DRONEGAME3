@@ -3,7 +3,8 @@
 #include "GameFramework/Character.h"
 #include "GameFramework/Controller.h"
 #include "DroneCharacter.h"
-
+#include "NiagaraFunctionLibrary.h"
+#include "NiagaraComponent.h"
 
 
 UShootingComponent::UShootingComponent()
@@ -78,11 +79,12 @@ void UShootingComponent::Shoot()
 
 	FHitResult HitResult;
 
-	DrawDebugLine(GetWorld(), Muzzlestart, End, FColor::Black, false, 1.0f, 0.0f, 5.0f);
+	//DrawDebugLine(GetWorld(), Muzzlestart, End, FColor::Black, false, 1.0f, 0.0f, 5.0f);
 	GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_Visibility, CollisionParams);
 	if (HitResult.bBlockingHit) {
 
 		auto Actor = HitResult.GetActor();
+		SpawnNiagara(HitResult);
 		Actor->TakeDamage(10.0f, FDamageEvent{}, Actor->GetInstigatorController(), Actor);
 	}
 }
@@ -90,7 +92,7 @@ void UShootingComponent::Shoot()
 void UShootingComponent::SpawnNiagara(FHitResult& HResult)
 {
 
-	
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), NiagaraEffect, HResult.ImpactPoint, HResult.ImpactNormal.Rotation());
 
 }
 
