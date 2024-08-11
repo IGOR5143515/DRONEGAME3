@@ -2,6 +2,9 @@
 #include "Engine/DamageEvents.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/Controller.h"
+#include "DroneCharacter.h"
+
+
 
 UShootingComponent::UShootingComponent()
 {
@@ -59,9 +62,15 @@ void UShootingComponent::Shoot()
 	FVector Start = Location;
 	FVector Direction = Rotation.Vector();
 
-	float TraceDistance = 1000.0f;
+	float TraceDistance = 2000.0f;
 
 	FVector End = Location + (Direction * TraceDistance);
+
+	auto MyChar = Cast<ADroneCharacter>(Character);
+	
+
+	FVector Muzzlestart= MyChar->GetMesh()->GetSocketLocation(MuzzleSocketName);// To trace from muzzle
+
 
 	FCollisionQueryParams CollisionParams;
 	CollisionParams.bReturnPhysicalMaterial = true;
@@ -69,13 +78,20 @@ void UShootingComponent::Shoot()
 
 	FHitResult HitResult;
 
-	DrawDebugLine(GetWorld(), Start, End, FColor::Black, false, 1.0f, 0.0f, 5.0f);
+	DrawDebugLine(GetWorld(), Muzzlestart, End, FColor::Black, false, 1.0f, 0.0f, 5.0f);
 	GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_Visibility, CollisionParams);
 	if (HitResult.bBlockingHit) {
 
 		auto Actor = HitResult.GetActor();
 		Actor->TakeDamage(10.0f, FDamageEvent{}, Actor->GetInstigatorController(), Actor);
 	}
+}
+
+void UShootingComponent::SpawnNiagara(FHitResult& HResult)
+{
+
+	
+
 }
 
 

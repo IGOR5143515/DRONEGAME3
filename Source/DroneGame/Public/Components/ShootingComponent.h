@@ -6,6 +6,8 @@
 #include "Components/ActorComponent.h"
 #include "ShootingComponent.generated.h"
 
+class UNiagaraSystem;
+class UPhysicalMaterial;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class DRONEGAME_API UShootingComponent : public UActorComponent
@@ -16,6 +18,11 @@ public:
 	// Sets default values for this component's properties
 	UShootingComponent();
 	FTimerHandle TimerHandle;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
+	UNiagaraSystem *NiagaraEffect;
+
+	FName MuzzleSocketName = "Muzzle";
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -27,6 +34,6 @@ public:
 	void StartFire();
 	void StopFire();
 	void Shoot();
-
+	void SpawnNiagara(FHitResult& HResult);
 
 };
