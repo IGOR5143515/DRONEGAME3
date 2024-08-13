@@ -22,7 +22,13 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
 	UNiagaraSystem *NiagaraEffect;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
+	UNiagaraSystem* TraceFX;
+
 	FName MuzzleSocketName = "Muzzle";
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
+	FString TraceTargetName="TraceTarget";
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -35,5 +41,7 @@ public:
 	void StopFire();
 	void Shoot();
 	void SpawnNiagara(FHitResult& HResult);
+	void SpawnTraceFX(FVector& TraceStart, FVector& TraceEnd);
+
 
 };

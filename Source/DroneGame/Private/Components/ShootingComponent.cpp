@@ -79,14 +79,18 @@ void UShootingComponent::Shoot()
 
 	FHitResult HitResult;
 
-	//DrawDebugLine(GetWorld(), Muzzlestart, End, FColor::Black, false, 1.0f, 0.0f, 5.0f);
+	FVector TraceFXEnd = End;
+	
 	GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_Visibility, CollisionParams);
 	if (HitResult.bBlockingHit) {
 
+		TraceFXEnd = HitResult.ImpactPoint;
 		auto Actor = HitResult.GetActor();
 		SpawnNiagara(HitResult);
 		Actor->TakeDamage(10.0f, FDamageEvent{}, Actor->GetInstigatorController(), Actor);
 	}
+
+	SpawnTraceFX(Muzzlestart, TraceFXEnd);
 }
 
 void UShootingComponent::SpawnNiagara(FHitResult& HResult)
@@ -94,6 +98,15 @@ void UShootingComponent::SpawnNiagara(FHitResult& HResult)
 
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), NiagaraEffect, HResult.ImpactPoint, HResult.ImpactNormal.Rotation());
 
+}
+
+void UShootingComponent::SpawnTraceFX(FVector& TraceStart, FVector& TraceEnd)
+{
+	auto TraceFXComponent = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), TraceFX,
+		TraceStart);
+	if (TraceFXComponent) {
+		TraceFXComponent->SetNiagaraVariableVec3(TraceTargetName, TraceEnd);
+	}
 }
 
 
