@@ -13,5 +13,7 @@ UCLASS()
 class DRONEGAME_API UMyAIPerceptionComponent : public UAIPerceptionComponent
 {
 	GENERATED_BODY()
+public:
+	AActor* GetClosesEnemy();
 	
 };

@@ -19,4 +19,6 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	UMyAIPerceptionComponent* PerceptionComp;
 	
+	virtual void Tick(float DeltaTime) override;
+
 };

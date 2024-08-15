@@ -50,36 +50,40 @@ void UShootingComponent::StopFire()
 
 void UShootingComponent::Shoot()
 {
-	auto Character = Cast<ACharacter>(GetOwner());
 
-
+	auto Character = Cast<ADroneCharacter>(GetOwner());
 	auto PlayerController = Character->GetController<APlayerController>();
+
+	FVector Muzzlestart = Character->GetMesh()->GetSocketLocation(MuzzleSocketName);
 
 	FVector Location;
 	FRotator Rotation;
 
-	PlayerController->GetPlayerViewPoint(Location, Rotation);
+	if (Character->IsPlayerControlled()) {
+		PlayerController->GetPlayerViewPoint(Location, Rotation);
+	}
+	else {
+		Location = Character->GetMesh()->GetSocketLocation(MuzzleSocketName);
+		Rotation = Character->GetMesh()->GetSocketRotation(MuzzleSocketName);
+		UE_LOG(LogTemp, Warning, TEXT("Rotation: %s"), *Rotation.ToString());
+		}
 
 	FVector Start = Location;
 	FVector Direction = Rotation.Vector();
-
+	
 	float TraceDistance = 2000.0f;
 
 	FVector End = Location + (Direction * TraceDistance);
-
-	auto MyChar = Cast<ADroneCharacter>(Character);
 	
 
-	FVector Muzzlestart= MyChar->GetMesh()->GetSocketLocation(MuzzleSocketName);// To trace from muzzle
-
+	FVector TraceFXEnd = End;
+	
 
 	FCollisionQueryParams CollisionParams;
 	CollisionParams.bReturnPhysicalMaterial = true;
 	CollisionParams.AddIgnoredActor(GetOwner());
 
 	FHitResult HitResult;
-
-	FVector TraceFXEnd = End;
 	
 	GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_Visibility, CollisionParams);
 	if (HitResult.bBlockingHit) {

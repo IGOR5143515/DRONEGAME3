@@ -10,3 +10,11 @@ AMyAIController::AMyAIController()
 	PerceptionComp = CreateDefaultSubobject<UMyAIPerceptionComponent>("PerceptionComp");
 	SetPerceptionComponent(*PerceptionComp);
 }
+
+void AMyAIController::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	auto AimActor = PerceptionComp->GetClosesEnemy();
+	SetFocus(AimActor);
+}
