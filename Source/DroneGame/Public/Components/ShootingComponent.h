@@ -29,6 +29,8 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
 	FString TraceTargetName="TraceTarget";
+
+	float TraceMaxDistance = 1200;
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -42,6 +44,8 @@ public:
 	void Shoot();
 	void SpawnNiagara(FHitResult& HResult);
 	void SpawnTraceFX(FVector& TraceStart, FVector& TraceEnd);
-
-
+	void MakeHit(FHitResult& HitResult, FVector& TraceStart, FVector& TraceEnd);
+	void GetTraceData(FVector& TraceStart, FVector& TraceEnd);
+	bool GetPlayerViewPoint(FVector& ViewLocation, FRotator& ViewRotation);
+	AController* GetPlayerController();
 };

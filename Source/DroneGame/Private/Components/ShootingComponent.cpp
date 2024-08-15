@@ -50,49 +50,57 @@ void UShootingComponent::StopFire()
 
 void UShootingComponent::Shoot()
 {
+	
 
-	auto Character = Cast<ADroneCharacter>(GetOwner());
-	auto PlayerController = Character->GetController<APlayerController>();
+	const auto Controller = GetPlayerController();
+	if (!Controller)return;
 
+	auto Character = Cast<ACharacter>(GetOwner());
+
+	
 	FVector Muzzlestart = Character->GetMesh()->GetSocketLocation(MuzzleSocketName);
+	FVector VievLocation;
+	FRotator VeievRotaion;
+	Controller->GetPlayerViewPoint(VievLocation, VeievRotaion);
 
-	FVector Location;
-	FRotator Rotation;
 
-	if (Character->IsPlayerControlled()) {
-		PlayerController->GetPlayerViewPoint(Location, Rotation);
-	}
-	else {
-		Location = Character->GetMesh()->GetSocketLocation(MuzzleSocketName);
-		Rotation = Character->GetMesh()->GetSocketRotation(MuzzleSocketName);
-		UE_LOG(LogTemp, Warning, TEXT("Rotation: %s"), *Rotation.ToString());
-		}
+	FTransform SocketTransform = Character->GetMesh()->GetSocketTransform(MuzzleSocketName);
 
-	FVector Start = Location;
-	FVector Direction = Rotation.Vector();
-	
-	float TraceDistance = 2000.0f;
+	FVector TraceStart = VievLocation;
 
-	FVector End = Location + (Direction * TraceDistance);
-	
+	auto BulletSpread = FMath::DegreesToRadians(1.5f);
 
-	FVector TraceFXEnd = End;
-	
+	FVector ShootDirection = FMath::VRandCone(VeievRotaion.Vector(), BulletSpread);
 
-	FCollisionQueryParams CollisionParams;
-	CollisionParams.bReturnPhysicalMaterial = true;
-	CollisionParams.AddIgnoredActor(GetOwner());
+	FVector TraceEnd = TraceStart + ShootDirection * TraceMaxDistance;
+
 
 	FHitResult HitResult;
-	
-	GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_Visibility, CollisionParams);
+	MakeHit(HitResult, TraceStart, TraceEnd);
+
+	FVector TraceFXEnd = TraceEnd;
+
 	if (HitResult.bBlockingHit) {
 
 		TraceFXEnd = HitResult.ImpactPoint;
-		auto Actor = HitResult.GetActor();
+
 		SpawnNiagara(HitResult);
-		Actor->TakeDamage(10.0f, FDamageEvent{}, Actor->GetInstigatorController(), Actor);
+		AActor* Actor = HitResult.GetActor();
+		if (!Actor)return;
+
+		Actor->TakeDamage(1.0f, FDamageEvent(), GetPlayerController(), Actor);
+		
 	}
+
+
+
+	//if (HitResult.bBlockingHit) {
+
+	////	TraceFXEnd = HitResult.ImpactPoint;
+	//	auto Actor = HitResult.GetActor();
+	//	SpawnNiagara(HitResult);
+	//	Actor->TakeDamage(10.0f, FDamageEvent{}, Actor->GetInstigatorController(), Actor);
+	//}
 
 	SpawnTraceFX(Muzzlestart, TraceFXEnd);
 }
@@ -111,6 +119,53 @@ void UShootingComponent::SpawnTraceFX(FVector& TraceStart, FVector& TraceEnd)
 	if (TraceFXComponent) {
 		TraceFXComponent->SetNiagaraVariableVec3(TraceTargetName, TraceEnd);
 	}
+}
+
+void UShootingComponent::MakeHit(FHitResult& HitResult, FVector& TraceStart, FVector& TraceEnd)
+{
+	FCollisionQueryParams CollisionParams;
+	CollisionParams.bReturnPhysicalMaterial = true;
+	CollisionParams.AddIgnoredActor(GetOwner());
+
+	GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECollisionChannel::ECC_Visibility, CollisionParams);
+}
+
+void UShootingComponent::GetTraceData(FVector& TraceStart, FVector& TraceEnd)
+{
+	FVector ViewLocation;
+	FRotator ViewRotation;
+
+	GetPlayerViewPoint(ViewLocation, ViewRotation);
+	TraceStart = ViewLocation;
+	FVector Direction = ViewRotation.Vector();
+	TraceEnd = TraceStart + Direction * TraceMaxDistance;
+}
+
+bool UShootingComponent::GetPlayerViewPoint(FVector& ViewLocation, FRotator& ViewRotation)
+{
+
+	auto Character = Cast<ACharacter>(GetOwner());
+
+	if (Character->IsPlayerControlled()) {
+		auto Controller = Character->GetController<APlayerController>();
+
+		Controller->GetPlayerViewPoint(ViewLocation, ViewRotation);
+
+
+	}
+	else
+	{
+		ViewLocation = Character->GetMesh()->GetSocketLocation(MuzzleSocketName);
+		ViewRotation = Character->GetMesh()->GetSocketRotation(MuzzleSocketName);
+	}
+
+	return true;
+}
+
+AController* UShootingComponent::GetPlayerController()
+{
+	const auto Pawn = Cast<APawn>(GetOwner());
+	return Pawn ? Pawn->GetController() : nullptr;
 }
 
 
