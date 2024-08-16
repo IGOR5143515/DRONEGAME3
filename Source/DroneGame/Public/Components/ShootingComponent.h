@@ -45,7 +45,5 @@ public:
 	void SpawnNiagara(FHitResult& HResult);
 	void SpawnTraceFX(FVector& TraceStart, FVector& TraceEnd);
 	void MakeHit(FHitResult& HitResult, FVector& TraceStart, FVector& TraceEnd);
-	void GetTraceData(FVector& TraceStart, FVector& TraceEnd);
-	bool GetPlayerViewPoint(FVector& ViewLocation, FRotator& ViewRotation);
 	AController* GetPlayerController();
 };

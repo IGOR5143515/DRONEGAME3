@@ -20,5 +20,6 @@ public:
 	UMyAIPerceptionComponent* PerceptionComp;
 	
 	virtual void Tick(float DeltaTime) override;
+	void IsBotDead();
 
 };

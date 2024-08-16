@@ -3,6 +3,7 @@
 
 #include "MyAIController.h"
 #include "Components/MyAIPerceptionComponent.h"
+#include "Components/HealthComponent.h"
 
 AMyAIController::AMyAIController()
 {
@@ -17,4 +18,16 @@ void AMyAIController::Tick(float DeltaTime)
 
 	auto AimActor = PerceptionComp->GetClosesEnemy();
 	SetFocus(AimActor);
+	IsBotDead();
+}
+
+void AMyAIController::IsBotDead()
+{
+
+	
+
+	//auto HealthComponent =character->GetComponentByClass(UHealthComponent::StaticClass());
+
+	
+
 }

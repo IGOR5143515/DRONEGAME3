@@ -10,6 +10,9 @@
 #include "Components/HealthComponent.h"
 #include "Components/ShootingComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "AIController.h"   
+#include "MyAIController.h"
+#include "Components/MyAIPerceptionComponent.h"
 
 
 
@@ -43,6 +46,11 @@ void ADroneCharacter::BeginPlay()
 	
 	HealthComponent->OnDeath.AddUObject(this, &ADroneCharacter::OnDeath);
 	
+
+	check(FloatingMovement);
+	check(CameraComponent);
+	check(SpringArmComponent);
+	check(ShootComponent);
 }
 
 
@@ -91,11 +99,12 @@ void ADroneCharacter::MoveRight(float Value)
 
 void ADroneCharacter::OnDeath()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Is DEAD"));
+	
 	ShootComponent->StopFire();
 	DisableInput(nullptr);	
 	GetCapsuleComponent()->SetSimulatePhysics(true);
-	//SetLifeSpan(1.0f);
+	
+
 }
 
 

@@ -32,12 +32,17 @@ void UHealthComponent::OnTakeAnyDamageHandle(AActor* DamagedActor,
 	AController* InstigatedBy, 
 	AActor* DamageCauser)
 {
-
-	if (IsDead())
+	if (IsDead()) {
 		OnDeath.Broadcast();
-	UE_LOG(LogTemp, Warning, TEXT("Health: %f"), Health);
-	
-	FMath::Clamp(Health -=Damage, 0, MaxHealth);
+		return;
+	}
 
+
+	Health = FMath::Clamp(Health - Damage, 0.0f, MaxHealth);
+
+	
+	if (IsDead()) {	// Is dead?
+		OnDeath.Broadcast();
+	}
 }
 

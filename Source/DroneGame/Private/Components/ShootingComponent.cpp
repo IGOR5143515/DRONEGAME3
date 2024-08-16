@@ -51,28 +51,24 @@ void UShootingComponent::StopFire()
 void UShootingComponent::Shoot()
 {
 	
-
 	const auto Controller = GetPlayerController();
 	if (!Controller)return;
 
 	auto Character = Cast<ACharacter>(GetOwner());
-
+	if (!Character)return;
 	
 	FVector Muzzlestart = Character->GetMesh()->GetSocketLocation(MuzzleSocketName);
 	FVector VievLocation;
 	FRotator VeievRotaion;
 	Controller->GetPlayerViewPoint(VievLocation, VeievRotaion);
-
+	
 
 	FTransform SocketTransform = Character->GetMesh()->GetSocketTransform(MuzzleSocketName);
-
 	FVector TraceStart = VievLocation;
 
-	auto BulletSpread = FMath::DegreesToRadians(1.5f);
-
-	FVector ShootDirection = FMath::VRandCone(VeievRotaion.Vector(), BulletSpread);
-
-	FVector TraceEnd = TraceStart + ShootDirection * TraceMaxDistance;
+	FVector Dir = VeievRotaion.Vector();
+	FVector TraceEnd = TraceStart + (Dir * TraceMaxDistance);
+	
 
 
 	FHitResult HitResult;
@@ -83,25 +79,13 @@ void UShootingComponent::Shoot()
 	if (HitResult.bBlockingHit) {
 
 		TraceFXEnd = HitResult.ImpactPoint;
-
 		SpawnNiagara(HitResult);
 		AActor* Actor = HitResult.GetActor();
 		if (!Actor)return;
-
-		Actor->TakeDamage(1.0f, FDamageEvent(), GetPlayerController(), Actor);
+		Actor->TakeDamage(5.0f, FDamageEvent(), GetPlayerController(), Actor);
 		
 	}
-
-
-
-	//if (HitResult.bBlockingHit) {
-
-	////	TraceFXEnd = HitResult.ImpactPoint;
-	//	auto Actor = HitResult.GetActor();
-	//	SpawnNiagara(HitResult);
-	//	Actor->TakeDamage(10.0f, FDamageEvent{}, Actor->GetInstigatorController(), Actor);
-	//}
-
+	
 	SpawnTraceFX(Muzzlestart, TraceFXEnd);
 }
 
@@ -130,37 +114,8 @@ void UShootingComponent::MakeHit(FHitResult& HitResult, FVector& TraceStart, FVe
 	GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECollisionChannel::ECC_Visibility, CollisionParams);
 }
 
-void UShootingComponent::GetTraceData(FVector& TraceStart, FVector& TraceEnd)
-{
-	FVector ViewLocation;
-	FRotator ViewRotation;
-
-	GetPlayerViewPoint(ViewLocation, ViewRotation);
-	TraceStart = ViewLocation;
-	FVector Direction = ViewRotation.Vector();
-	TraceEnd = TraceStart + Direction * TraceMaxDistance;
-}
-
-bool UShootingComponent::GetPlayerViewPoint(FVector& ViewLocation, FRotator& ViewRotation)
-{
-
-	auto Character = Cast<ACharacter>(GetOwner());
-
-	if (Character->IsPlayerControlled()) {
-		auto Controller = Character->GetController<APlayerController>();
-
-		Controller->GetPlayerViewPoint(ViewLocation, ViewRotation);
 
 
-	}
-	else
-	{
-		ViewLocation = Character->GetMesh()->GetSocketLocation(MuzzleSocketName);
-		ViewRotation = Character->GetMesh()->GetSocketRotation(MuzzleSocketName);
-	}
-
-	return true;
-}
 
 AController* UShootingComponent::GetPlayerController()
 {

@@ -28,7 +28,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Health")
 	float GetPercent() { return Health / MaxHealth; }
-	bool IsDead() { return Health <= 0.0f; }
+	bool IsDead() { return Health <=0.0f; }
 
 
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
