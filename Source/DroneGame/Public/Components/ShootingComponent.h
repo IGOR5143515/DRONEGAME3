@@ -30,10 +30,20 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
 	FString TraceTargetName="TraceTarget";
 
-	float TraceMaxDistance = 1200;
+	float TraceMaxDistance = 2000;
+
+
+	UFUNCTION(BlueprintCallable, Category = "Bullets")
+	float GetBullets() { return 0.0f; };
+	void SetBullets(float Value) { Bullets = Value; }
+	bool CanFire() { return Bullets > 0.0f; }
+	float MaxBullets;
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
+	float Bullets;
+
 
 public:	
 	// Called every frame

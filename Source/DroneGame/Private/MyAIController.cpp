@@ -4,6 +4,8 @@
 #include "MyAIController.h"
 #include "Components/MyAIPerceptionComponent.h"
 #include "Components/HealthComponent.h"
+#include "AI/AICharacter.h"
+#include "Components/HealthComponent.h"
 
 AMyAIController::AMyAIController()
 {
@@ -17,17 +19,11 @@ void AMyAIController::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	auto AimActor = PerceptionComp->GetClosesEnemy();
-	SetFocus(AimActor);
-	IsBotDead();
+
+	if (!isPersonDead) {
+		SetFocus(AimActor);
+	}
+	
 }
 
-void AMyAIController::IsBotDead()
-{
-
 	
-
-	//auto HealthComponent =character->GetComponentByClass(UHealthComponent::StaticClass());
-
-	
-
-}

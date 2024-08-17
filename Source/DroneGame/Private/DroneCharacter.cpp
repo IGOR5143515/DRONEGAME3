@@ -13,6 +13,10 @@
 #include "AIController.h"   
 #include "MyAIController.h"
 #include "Components/MyAIPerceptionComponent.h"
+#include "GameFramework/PlayerStart.h"
+#include "Kismet/GameplayStatics.h"
+#include "GameFramework/Controller.h"
+#include "GameFramework/PlayerController.h"
 
 
 
@@ -103,7 +107,25 @@ void ADroneCharacter::OnDeath()
 	ShootComponent->StopFire();
 	DisableInput(nullptr);	
 	GetCapsuleComponent()->SetSimulatePhysics(true);
+
 	
+		APlayerStart* PlayerStart = Cast<APlayerStart>(UGameplayStatics::GetActorOfClass(GetWorld(), APlayerStart::StaticClass()));
+
+		if (PlayerStart && CharacterClass) {
+
+			FActorSpawnParameters SpawnParams;
+			SpawnParams.Owner = this;
+			FVector SpawnLocation = PlayerStart->GetActorLocation();
+			FRotator SpawnRotation = PlayerStart->GetActorRotation();
+			ADroneCharacter* NewDrone = GetWorld()->SpawnActor<ADroneCharacter>(CharacterClass, SpawnLocation, SpawnRotation, SpawnParams);
+
+			if (NewDrone && Controller)  
+			{
+				Controller->Possess(NewDrone);
+				Destroy();
+			}
+
+		}
 
 }
 

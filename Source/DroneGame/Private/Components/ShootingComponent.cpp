@@ -11,7 +11,8 @@ UShootingComponent::UShootingComponent()
 {
 
 	PrimaryComponentTick.bCanEverTick = true;
-
+	MaxBullets = 100.0f;
+	Bullets =  MaxBullets;
 
 }
 
@@ -36,11 +37,13 @@ void UShootingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAc
 
 void UShootingComponent::StartFire()
 {
-	if (GetWorld()) {
-		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UShootingComponent::Shoot, 0.05f, true);
-	}
-	Shoot();
+	if (CanFire()) {
+		if (GetWorld()) {
+			GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UShootingComponent::Shoot, 0.05f, true);
+		}
+		Shoot();
 
+	}
 }
 
 void UShootingComponent::StopFire()
@@ -50,6 +53,18 @@ void UShootingComponent::StopFire()
 
 void UShootingComponent::Shoot()
 {
+
+	
+	if (Bullets > 0.0f) {
+		
+		Bullets = FMath::Clamp(Bullets - 1, 0.0f, MaxBullets);
+
+		if (!CanFire()) {
+			StopFire();
+		}
+	}
+
+	
 	
 	const auto Controller = GetPlayerController();
 	if (!Controller)return;
@@ -82,7 +97,7 @@ void UShootingComponent::Shoot()
 		SpawnNiagara(HitResult);
 		AActor* Actor = HitResult.GetActor();
 		if (!Actor)return;
-		Actor->TakeDamage(5.0f, FDamageEvent(), GetPlayerController(), Actor);
+		Actor->TakeDamage(1.0f, FDamageEvent(), GetPlayerController(), Actor);
 		
 	}
 	

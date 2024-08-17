@@ -43,6 +43,9 @@ UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (A
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UShootingComponent* ShootComponent;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Character Ref")
+	TSubclassOf<ADroneCharacter> CharacterClass;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -54,7 +57,7 @@ public:
 	void MoveUp(float Value);
 	void MoveForward(float Value);
 	void MoveRight(float Value);
-	void OnDeath();
+	virtual void OnDeath();
 	
 	
 };
