@@ -13,5 +13,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "UI")
 	float GetHealthPercent()const;
 
+	UFUNCTION(BlueprintCallable, Category = "UI")
+	float GetAmmo();
+
+	UFUNCTION(BlueprintCallable, Category = "UI")
+	float GetMaxBullets();
 	
 };

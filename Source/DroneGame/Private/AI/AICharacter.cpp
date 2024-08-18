@@ -37,6 +37,8 @@ void AAICharacter::BeginPlay()
 	ShootComp->MaxBullets = 10000;
 	ShootComp->SetBullets(10000);
 
+	ShootComp->Damage = 1.0f;
+
 
 }
 

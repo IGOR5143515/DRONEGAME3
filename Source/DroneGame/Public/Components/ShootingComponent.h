@@ -34,10 +34,12 @@ public:
 
 
 	UFUNCTION(BlueprintCallable, Category = "Bullets")
-	float GetBullets() { return 0.0f; };
+	float GetBullets() { return Bullets; };
 	void SetBullets(float Value) { Bullets = Value; }
 	bool CanFire() { return Bullets > 0.0f; }
+	float GetMaxBullets() { return MaxBullets; }
 	float MaxBullets;
+	float Damage = 10;
 
 protected:
 	// Called when the game starts

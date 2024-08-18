@@ -97,7 +97,7 @@ void UShootingComponent::Shoot()
 		SpawnNiagara(HitResult);
 		AActor* Actor = HitResult.GetActor();
 		if (!Actor)return;
-		Actor->TakeDamage(1.0f, FDamageEvent(), GetPlayerController(), Actor);
+		Actor->TakeDamage(Damage, FDamageEvent(), GetPlayerController(), Actor);
 		
 	}
 	
