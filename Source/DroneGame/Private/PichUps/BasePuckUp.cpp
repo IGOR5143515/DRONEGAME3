@@ -30,6 +30,11 @@ void ABasePuckUp::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	FRotator RotationDelta = FRotator(0, 100 * DeltaTime, 0);
+	FQuat QuatRotation = FQuat(RotationDelta);
+
+	Mesh->AddLocalRotation(QuatRotation);
+
 }
 
 void ABasePuckUp::NotifyActorBeginOverlap(AActor* OtherActor)
