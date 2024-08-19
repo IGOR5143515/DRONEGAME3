@@ -6,6 +6,7 @@
 #include "Components/HealthComponent.h"
 #include "AI/AICharacter.h"
 #include "Components/HealthComponent.h"
+#include "DroneCharacter.h"
 
 AMyAIController::AMyAIController()
 {
@@ -20,10 +21,15 @@ void AMyAIController::Tick(float DeltaTime)
 
 	auto AimActor = PerceptionComp->GetClosesEnemy();
 
-	if (!isPersonDead) {
-		SetFocus(AimActor);
-	}
+	auto DroneChar =Cast<ADroneCharacter>(GetPawn());
+	auto HealthComponent = Cast<UHealthComponent>(DroneChar->GetComponentByClass(UHealthComponent::StaticClass()));
+
 	
+	SetFocus(AimActor);
+	
+
+
+
 }
 
 	
