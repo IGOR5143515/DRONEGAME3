@@ -46,8 +46,6 @@ void AAICharacter::BeginPlay()
 	auto ShootComp =Cast <UShootingComponent>(GetComponentByClass(UShootingComponent::StaticClass()));
 	if (!ShootComp)return;
 
-	ShootComp->MaxBullets = 10000;
-	ShootComp->SetBullets(10000);
 
 	ShootComp->Damage = 1.0f;
 

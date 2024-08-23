@@ -3,6 +3,7 @@
 
 #include "PichUps/BasePuckUp.h"
 #include "Components/StaticMeshComponent.h"
+#include "TimerManager.h"
 
 // Sets default values
 ABasePuckUp::ABasePuckUp()
@@ -11,10 +12,15 @@ ABasePuckUp::ABasePuckUp()
 	PrimaryActorTick.bCanEverTick = true;
 
 	SceneComponent = CreateDefaultSubobject<USceneComponent>("SceneComponent");
-	SetRootComponent(SceneComponent);
+	
 
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>("Mesh");
 	Mesh->SetupAttachment(SceneComponent);
+	Mesh->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	Mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
+	SetRootComponent(Mesh);
+
+
 
 }
 
@@ -23,6 +29,7 @@ void ABasePuckUp::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	check(Mesh);
 }
 
 // Called every frame
@@ -39,8 +46,39 @@ void ABasePuckUp::Tick(float DeltaTime)
 
 void ABasePuckUp::NotifyActorBeginOverlap(AActor* OtherActor)
 {
-
 	Super::NotifyActorBeginOverlap(OtherActor);
-	UE_LOG(LogTemp, Error, TEXT("sef"));
+	
+
+	PickUpWasTaken();
+}
+
+void ABasePuckUp::Respawn()
+{
+
+	if (GetRootComponent()) {
+		GetRootComponent()->SetVisibility(true, true);
+	}
+	Mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
+
+}
+
+void ABasePuckUp::PickUpWasTaken()
+{
+	Mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+
+	if (GetRootComponent()) {
+	GetRootComponent()->SetVisibility(false, true);
+	}
+
+	
+	GetWorldTimerManager().SetTimer(RespawnTimerHandle, this, &ABasePuckUp::Respawn, RespawnTime);
+
+	
+
+}
+
+bool ABasePuckUp::CouldBeTaken()
+{
+	return !GetWorldTimerManager().IsTimerActive(RespawnTimerHandle);
 }
 

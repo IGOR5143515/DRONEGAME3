@@ -40,6 +40,7 @@ public:
 	float GetMaxBullets() { return MaxBullets; }
 	float MaxBullets;
 	float Damage = 10;
+	float GetPertcent() { return Bullets / MaxBullets; }
 
 protected:
 	// Called when the game starts

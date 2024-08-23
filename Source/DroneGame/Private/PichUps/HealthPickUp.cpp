@@ -7,6 +7,7 @@
 
 void AHealthPickUp::NotifyActorBeginOverlap(AActor* OtherActor)
 {
+	Super::NotifyActorBeginOverlap(OtherActor);
 	auto Character = Cast<ADroneCharacter>(OtherActor);
 	if (!Character)return;
 
@@ -19,7 +20,11 @@ void AHealthPickUp::NotifyActorBeginOverlap(AActor* OtherActor)
 
 	auto CurrentHealth = HealthComponent->GetHealth();
 
-	CurrentHealth = FMath::Clamp(CurrentHealth + 30.0f, 0.0f, 100.0f);
+	CurrentHealth = FMath::Clamp(CurrentHealth + 40.0f, 0.0f, 100.0f);
 	HealthComponent->SetHealth(CurrentHealth);
+
+
+	UE_LOG(LogTemp, Error, TEXT("Health- %f"), HealthComponent->GetHealth());
+
 
 }
