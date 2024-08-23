@@ -13,14 +13,11 @@ ABasePuckUp::ABasePuckUp()
 
 	SceneComponent = CreateDefaultSubobject<USceneComponent>("SceneComponent");
 	
-
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>("Mesh");
 	Mesh->SetupAttachment(SceneComponent);
 	Mesh->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	Mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
 	SetRootComponent(Mesh);
-
-
 
 }
 
@@ -70,10 +67,8 @@ void ABasePuckUp::PickUpWasTaken()
 	GetRootComponent()->SetVisibility(false, true);
 	}
 
-	
 	GetWorldTimerManager().SetTimer(RespawnTimerHandle, this, &ABasePuckUp::Respawn, RespawnTime);
 
-	
 
 }
 

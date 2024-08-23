@@ -103,29 +103,10 @@ void ADroneCharacter::MoveRight(float Value)
 
 void ADroneCharacter::OnDeath()
 {
-	
 	ShootComponent->StopFire();
 	DisableInput(nullptr);	
 	GetCapsuleComponent()->SetSimulatePhysics(true);
 
-	
-		APlayerStart* PlayerStart = Cast<APlayerStart>(UGameplayStatics::GetActorOfClass(GetWorld(), APlayerStart::StaticClass()));
-
-		if (PlayerStart && CharacterClass) {
-
-			FActorSpawnParameters SpawnParams;
-			SpawnParams.Owner = this;
-			FVector SpawnLocation = PlayerStart->GetActorLocation();
-			FRotator SpawnRotation = PlayerStart->GetActorRotation();
-			ADroneCharacter* NewDrone = GetWorld()->SpawnActor<ADroneCharacter>(CharacterClass, SpawnLocation, SpawnRotation, SpawnParams);
-
-			if (NewDrone && Controller)  
-			{
-				Controller->Possess(NewDrone);
-				Destroy();
-			}
-
-		}
 
 }
 

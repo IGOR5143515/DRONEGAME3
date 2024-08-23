@@ -17,7 +17,7 @@ void AAmmoPickUp::NotifyActorBeginOverlap(AActor* OtherActor)
 	
 
 
-	CurrentAmmo = FMath::Clamp(CurrentAmmo + 50, 0.0f, 100.0f);
+	CurrentAmmo = FMath::Clamp(CurrentAmmo + 20, 0.0f, 100.0f);
 	ShootComponent->SetBullets(CurrentAmmo);
 	Super::NotifyActorBeginOverlap(OtherActor);
 
