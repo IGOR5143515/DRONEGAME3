@@ -10,6 +10,15 @@
 #include "Perception/AIPerceptionComponent.h"
 #include "Perception/AISense_Sight.h"
 
+AAICharacter::AAICharacter():Super()
+{
+	AutoPossessAI = EAutoPossessAI::Disabled;
+	AIControllerClass = AMyAIController::StaticClass();
+
+
+}
+
+
 void AAICharacter::OnDeath()
 {
 	Super::OnDeath();
@@ -51,5 +60,6 @@ void AAICharacter::BeginPlay()
 
 
 }
+
 
 

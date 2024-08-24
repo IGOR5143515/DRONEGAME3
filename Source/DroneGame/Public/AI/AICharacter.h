@@ -6,9 +6,8 @@
 #include "DroneCharacter.h"
 #include "AICharacter.generated.h"
 
-/**
- * 
- */
+class UBehaviorTree;
+
 UCLASS()
 class DRONEGAME_API AAICharacter : public ADroneCharacter
 {
@@ -17,4 +16,10 @@ protected:
 	virtual void OnDeath()override;
 	virtual void BeginPlay()override;
 	
+public:
+	AAICharacter();
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI")
+	UBehaviorTree* BehaivorTree;
+
 };

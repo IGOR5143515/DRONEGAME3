@@ -24,7 +24,7 @@ void AHealthPickUp::NotifyActorBeginOverlap(AActor* OtherActor)
 	HealthComponent->SetHealth(CurrentHealth);
 
 
-	UE_LOG(LogTemp, Error, TEXT("Health- %f"), HealthComponent->GetHealth());
+	
 
 
 }

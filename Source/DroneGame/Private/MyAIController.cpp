@@ -7,12 +7,16 @@
 #include "AI/AICharacter.h"
 #include "Components/HealthComponent.h"
 #include "DroneCharacter.h"
+#include "BehaviorTree/BlackboardComponent.h"
+
 
 AMyAIController::AMyAIController()
 {
 
 	PerceptionComp = CreateDefaultSubobject<UMyAIPerceptionComponent>("PerceptionComp");
 	SetPerceptionComponent(*PerceptionComp);
+
+	bWantsPlayerState = true;
 }
 
 void AMyAIController::Tick(float DeltaTime)
@@ -30,6 +34,16 @@ void AMyAIController::Tick(float DeltaTime)
 
 
 
+}
+
+void AMyAIController::OnPossess(APawn* InPawn)
+{
+	Super::OnPossess(InPawn);
+
+
+	if (auto CharComp = Cast<AAICharacter>(InPawn)) {
+		RunBehaviorTree(CharComp->BehaivorTree);
+	}
 }
 
 	

@@ -12,7 +12,7 @@ UFIndAmmoDecorator::UFIndAmmoDecorator()
 
 bool UFIndAmmoDecorator::CalculateRawConditionValue(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) const
 {
-	UE_LOG(LogTemp, Error, TEXT("Find Ammo!"));
+	
 
 	auto AIController = OwnerComp.GetAIOwner();
 	if (!AIController)return false;

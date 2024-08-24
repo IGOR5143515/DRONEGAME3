@@ -7,6 +7,8 @@
 #include "MyAIController.generated.h"
 
 class UMyAIPerceptionComponent;
+class  UBehaviorTree;
+
 
 UCLASS()
 class DRONEGAME_API AMyAIController : public AAIController
@@ -20,6 +22,10 @@ public:
 	UMyAIPerceptionComponent* PerceptionComp;
 	
 	virtual void Tick(float DeltaTime) override;
+
 	
+
+public:
+	virtual void OnPossess(APawn* InPawn) override;
 	bool isPersonDead = false;
 };

@@ -37,7 +37,7 @@ void UHealthComponent::OnTakeAnyDamageHandle(AActor* DamagedActor,
 		return;
 	}
 
-	UE_LOG(LogTemp, Error, TEXT("%f"), Damage);
+
 	Health = FMath::Clamp(Health - Damage, 0.0f, MaxHealth);
 
 	

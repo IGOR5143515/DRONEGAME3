@@ -18,6 +18,9 @@ void AMyGameModeBase::StartPlay()
 	Super::StartPlay();
 
 	SpawnBots();
+	CurrentRound = 1;
+	StartRound();
+
 }
 
 UClass* AMyGameModeBase::GetDefaultPawnClassForController_Implementation(AController* InController)
@@ -41,4 +44,50 @@ void AMyGameModeBase::SpawnBots()
 		RestartPlayer(AIController);
 	}
 	
+}
+
+void AMyGameModeBase::StartRound()
+{
+	RoundCountDown = GameData.RoundTime;
+	GetWorldTimerManager().SetTimer(GameRoundTimerHandle, this, &AMyGameModeBase::GameTimerUpdate, 1.0f, true);
+}
+
+void AMyGameModeBase::GameTimerUpdate()
+{
+
+	UE_LOG(LogTemp, Error, TEXT("Time %i / Round %i / %i"), RoundCountDown, CurrentRound, GameData.RoundsNum);
+
+	
+	if (--RoundCountDown == 0) {
+		GetWorldTimerManager().ClearTimer(GameRoundTimerHandle);
+
+		if (CurrentRound + 1 <= GameData.RoundsNum) {
+			++CurrentRound;
+			ResetPlayers();
+			StartRound();
+		}
+		else
+			UE_LOG(LogTemp, Error, TEXT("Game Ower"));
+	}
+}
+
+void AMyGameModeBase::ResetPlayers()
+{
+
+	if (!GetWorld())return;
+
+	for (auto It = GetWorld()->GetControllerIterator(); It; ++It) {
+
+		ResetOnePlayer(It->Get());
+	}
+
+}
+
+void AMyGameModeBase::ResetOnePlayer(AController* Controller)
+{
+	if (Controller && Controller->GetWorld()) {
+		Controller->GetPawn()->Reset();
+	}
+
+	RestartPlayer(Controller);
 }

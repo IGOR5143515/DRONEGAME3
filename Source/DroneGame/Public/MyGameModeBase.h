@@ -16,6 +16,11 @@ struct FGameData
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Game", meta = (ClampMin = "1", ClampMax = "100"))
 	int32 PlayersNum = 4;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Game", meta = (ClampMin = "1", ClampMax = "10"))
+	int32 RoundsNum = 4;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Game", meta = (ClampMin = "3", ClampMax = "300"))
+	int32 RoundTime = 10;
 };
 
 UCLASS()
@@ -40,4 +45,14 @@ protected:
 
 private:
 	void SpawnBots();
+	void StartRound();
+	void GameTimerUpdate();
+	void ResetPlayers();
+	void ResetOnePlayer(AController * Controller);
+
+
+	int32 CurrentRound;
+	int32 RoundCountDown;
+	FTimerHandle GameRoundTimerHandle;
+
 };
