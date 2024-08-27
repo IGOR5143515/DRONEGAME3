@@ -98,6 +98,8 @@ void ADroneCharacter::MoveForward(float Value)
 
 void ADroneCharacter::MoveRight(float Value)
 {
+
+
 	AddMovementInput(GetActorRightVector(), Value);
 }
 
@@ -108,6 +110,15 @@ void ADroneCharacter::OnDeath()
 	GetCapsuleComponent()->SetSimulatePhysics(true);
 
 
+}
+
+void ADroneCharacter::SetPlayerColor(const FLinearColor& Color)
+{
+	auto MaterialInst = GetMesh()->CreateAndSetMaterialInstanceDynamic(0);
+		if(!MaterialInst)return;
+
+
+		MaterialInst->SetVectorParameterValue(MaterialColorName, Color);
 }
 
 

@@ -46,6 +46,8 @@ UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (A
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Character Ref")
 	TSubclassOf<ADroneCharacter> CharacterClass;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Material")
+	FName MaterialColorName = "Paint Color";
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -58,6 +60,6 @@ public:
 	void MoveForward(float Value);
 	void MoveRight(float Value);
 	virtual void OnDeath();
-	
+	void SetPlayerColor(const FLinearColor& Color);
 	
 };

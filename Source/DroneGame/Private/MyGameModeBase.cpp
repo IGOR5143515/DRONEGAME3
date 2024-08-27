@@ -5,11 +5,14 @@
 #include "DroneCharacter.h"
 #include "MyAIController.h"
 #include "MyPlayerController.h"
+#include "CharacterPlayerState.h"
+
 
 AMyGameModeBase::AMyGameModeBase()
 {
 	DefaultPawnClass = ADroneCharacter::StaticClass();
 	PlayerControllerClass = AMyPlayerController::StaticClass();
+	PlayerStateClass = ACharacterPlayerState::StaticClass();
 
 }
 
@@ -17,6 +20,7 @@ void AMyGameModeBase::StartPlay()
 {
 	Super::StartPlay();
 
+	CreateTeamsInfo();
 	SpawnBots();
 	CurrentRound = 1;
 	StartRound();
@@ -79,6 +83,7 @@ void AMyGameModeBase::ResetPlayers()
 	for (auto It = GetWorld()->GetControllerIterator(); It; ++It) {
 
 		ResetOnePlayer(It->Get());
+	
 	}
 
 }
@@ -90,4 +95,47 @@ void AMyGameModeBase::ResetOnePlayer(AController* Controller)
 	}
 
 	RestartPlayer(Controller);
+	SetPlayerColor(Controller);
+}
+
+void AMyGameModeBase::CreateTeamsInfo()
+{
+	if (!GetWorld())return;
+
+	int32 TeamID = 1;
+
+	for (auto It = GetWorld()->GetControllerIterator(); It; ++It) {
+
+		 auto Controller = It->Get();
+		if (!Controller)continue;
+
+		 auto PlayerState = Cast<ACharacterPlayerState>(Controller->PlayerState);
+		if (!PlayerState)continue;
+
+		PlayerState->SetTeamID(TeamID);
+		PlayerState->SetTeamColor(DetermineColorByTeamID(TeamID));
+		SetPlayerColor(Controller);
+
+		TeamID = TeamID == 1 ? 2 : 1;
+	}
+}
+
+void AMyGameModeBase::SetPlayerColor(AController* Controller)
+{
+	if (!Controller)return;
+	const auto Character = Cast<ADroneCharacter>(Controller->GetPawn());
+	if (!Character)return;
+
+	const auto PlayerState = Cast<ACharacterPlayerState>(Controller->PlayerState);
+	if (!PlayerState)return;
+
+	Character->SetPlayerColor(PlayerState->GetTeamColor());
+}
+
+FLinearColor AMyGameModeBase::DetermineColorByTeamID(  int32 TeamID) 
+{
+	if (TeamID - 1 < GameData.TeamColors.Num()) {
+		return GameData.TeamColors[TeamID - 1];
+	}
+	return GameData.DefaultTeamColor;
 }
