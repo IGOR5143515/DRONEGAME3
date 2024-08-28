@@ -106,6 +106,8 @@ void AMyGameModeBase::CreateTeamsInfo()
 
 	for (auto It = GetWorld()->GetControllerIterator(); It; ++It) {
 
+		UE_LOG(LogTemp, Error, TEXT("TeamInfo"));
+
 		 auto Controller = It->Get();
 		if (!Controller)continue;
 

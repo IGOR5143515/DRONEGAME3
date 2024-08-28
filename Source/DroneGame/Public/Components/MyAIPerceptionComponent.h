@@ -16,4 +16,6 @@ class DRONEGAME_API UMyAIPerceptionComponent : public UAIPerceptionComponent
 public:
 	AActor* GetClosesEnemy();
 	
+	bool AreEnemies(AController* Controller1, AController* Controller2);
+
 };
