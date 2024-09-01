@@ -20,7 +20,7 @@ void AHealthPickUp::NotifyActorBeginOverlap(AActor* OtherActor)
 
 	auto CurrentHealth = HealthComponent->GetHealth();
 
-	CurrentHealth = FMath::Clamp(CurrentHealth + 20.0f, 0.0f, 100.0f);
+	CurrentHealth = FMath::Clamp(CurrentHealth + 50.0f, 0.0f, 100.0f);
 	HealthComponent->SetHealth(CurrentHealth);
 
 
